@@ -1,0 +1,96 @@
+﻿@model Books.Models.Book
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details about @Model.Title</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FrontPage)
+        </dt>
+        <dd class="col-sm-10">
+            @if (!string.IsNullOrEmpty(Model.FrontPage))
+            {
+                <img src="@Model.FrontPage" alt="Book Cover" />
+            }
+            else
+            {
+                <p>No cover image available.</p>
+            }
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Author)
+        </dt>
+        <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Author.FullName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.YearPublished)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.YearPublished)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Genres)
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.Genres == null || Model.Genres.Count == 0)
+            {
+                <h4>No genres associated with @Model.Title.</h4>
+            }
+            else
+            {
+                <ul>
+                    @foreach (var genre in Model.Genres)
+                    {
+                        <li>@genre.Genre?.GenreName</li>
+                    }
+                </ul>
+            }
+        </dd>
+        <dt class="col-sm-2">
+            Average Rating
+        </dt>
+        <dd class="col-sm-10">
+            @Model.AverageRating()
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Publisher)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Publisher)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NumPages)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NumPages)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DownloadUrl)
+        </dt>
+        <dd class = "col-sm-10">
+            <a href="@Model.DownloadUrl" target="_blank" style="font-style: italic">link</a>
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

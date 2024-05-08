@@ -1,0 +1,56 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+img {
+    position: relative;
+    max-width: 100px;
+    max-height: 200px;
+    border-radius: 10px;
+    border:solid;
+}
+
+table, body header nav {
+    text-align: center;
+    height: 100%;
+    background-color: #f2f2f2;
+}
+
+nav { 
+    border-radius: 10px;
+    background-color: cornflowerblue;
+    
+}
+
+.hoverable-row {
+    transition: background-color 0.3s ease;
+}
+
+.selected {
+    background-color: darkslateblue;
+    color: blanchedalmond;
+    font-style: italic;
+}
+
+body {
+    max-width: 1200px;
+    margin: auto;
+    padding: 0 20px;
+    background-color: #f4f4f4;
+    margin-bottom: 60px;
+}

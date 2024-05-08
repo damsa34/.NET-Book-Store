@@ -1,0 +1,133 @@
+﻿@model Books.Models.Author
+@using Books.Models
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div>
+    <h4>Details about @Model.FullName</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.BirthDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.BirthDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Nationality)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Nationality)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Gender)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Gender)
+        </dd>
+    </dl>
+</div>
+
+@if (Model.Books.Count == 0 || Model.Books == null)
+{
+    <div>
+        <h4>There are no associated books with @Model.FullName.</h4>
+    </div>
+}
+else
+{
+    <div>
+        <h4>@Model.FullName's books: </h4>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Front cover
+                </th>
+                <th>
+                    Title
+                </th>
+                <th>
+                    Published in
+                </th>
+                <th>
+                    Number of pages
+                </th>
+                <th>
+                    Genres
+                </th>
+                <th>
+                    Average rating
+                </th>
+                <th>
+                    Download link
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in Model.Books)
+            {
+                <tr class="hoverable-row" onmouseover="this.classList.add('selected')" onmouseout="this.classList.remove('selected')">
+                    <th>
+                        @if (!string.IsNullOrEmpty(book.FrontPage))
+                        {
+                            <img src="@book.FrontPage" alt="Book Cover" />
+                        }
+                        else
+                        {
+                            <p>No cover image available.</p>
+                        }
+                    </th>
+                    <th>
+                        @Html.DisplayFor(modelBook => book.Title)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(modelBook => book.YearPublished)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(modelBook => book.NumPages)
+                    </th>
+                    <th>
+                        @if (book.Genres != null && book.Genres.Any())
+                        {
+                            <ul>
+                                @foreach (var genreName in book.Genres)
+                                {
+                                    <li>@genreName.Genre.GenreName</li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p>No genres found for author @Model.FullName.</p>
+                        }
+                    </th>
+                    <th>
+                        @book.AverageRating()
+                    </th>
+                    <th>
+                        <a href="@book.DownloadUrl" target="_blank" style="font-style: italic">link</a>
+                    </th>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>
+}

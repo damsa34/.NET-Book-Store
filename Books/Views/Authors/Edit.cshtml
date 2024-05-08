@@ -1,0 +1,57 @@
+﻿@model Books.ViewModels.AuthorViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit things about @Model.Author.FullName</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Author.Id" />
+            <div class="form-group">
+                <label asp-for="Author.FirstName" class="control-label"></label>
+                <input asp-for="Author.FirstName" class="form-control" />
+                <span asp-validation-for="Author.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Author.LastName" class="control-label"></label>
+                <input asp-for="Author.LastName" class="form-control" />
+                <span asp-validation-for="Author.LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Author.BirthDate" class="control-label"></label>
+                <input asp-for="Author.BirthDate" class="form-control" />
+                <span asp-validation-for="Author.BirthDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Author.Nationality" class="control-label"></label>
+                <input asp-for="Author.Nationality" class="form-control" />
+                <span asp-validation-for="Author.Nationality" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Author.Gender" class="control-label"></label>
+                <input asp-for="Author.Gender" class="form-control" />
+                <span asp-validation-for="Author.Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">    
+                <label asp-for="SelectedBooks">Select books: </label>
+                <select asp-for="SelectedBooks" asp-items="Model.BookOptions" class="form-control" multiple></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
