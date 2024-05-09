@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 
 namespace Books.Models
 {
@@ -32,12 +33,12 @@ namespace Books.Models
         public ICollection<Review>? Reviews { get; set; }
         public ICollection<UserBooks>? Users { get; set; }
         [Display(Name = "Average Rating")]
-        public double AverageRating()
+        public float AverageRating()
         {
             if (Reviews != null && Reviews.Any() && Reviews.All(r => r.Rating != null))
             {
                 int totalRating = (int)Reviews.Sum(r => r.Rating);
-                return (double)totalRating / Reviews.Count;
+                return (float)totalRating / Reviews.Count;
             }
 
             return 0;
