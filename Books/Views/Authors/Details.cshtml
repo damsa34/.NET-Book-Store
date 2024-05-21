@@ -73,9 +73,12 @@ else
                 <th>
                     Average rating
                 </th>
-                <th>
-                    Download link
-                </th>
+                @if (User.Identity.IsAuthenticated && User.IsInRole("User"))
+                {
+                    <th>
+                        Download link
+                    </th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -119,15 +122,21 @@ else
                     <th>
                         @book.AverageRating()
                     </th>
-                    <th>
-                        <a href="@book.DownloadUrl" target="_blank" style="font-style: italic">link</a>
-                    </th>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("User"))
+                    {
+                        <th>
+                            <a href="@book.DownloadUrl" target="_blank" style="font-style: italic">link</a>
+                        </th>
+                    }
                 </tr>
             }
         </tbody>
     </table>
     <div>
-        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+        {
+            <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+        }
         <a asp-action="Index">Back to List</a>
     </div>
 }

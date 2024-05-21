@@ -22,22 +22,22 @@
                 <p>No cover image available.</p>
             }
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Title)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Title)
         </dd>
         <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Author)
+            @Html.DisplayNameFor(model => model.Author)
         </dt>
         <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Author.FullName)
+            @Html.DisplayFor(model => model.Author.FullName)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.YearPublished)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.YearPublished)
         </dd>
         <dt class="col-sm-2">
@@ -76,21 +76,48 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Publisher)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.NumPages)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.NumPages)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DownloadUrl)
-        </dt>
-        <dd class = "col-sm-10">
-            <a href="@Model.DownloadUrl" target="_blank" style="font-style: italic">link</a>
-        </dd>
+        @if (User.Identity.IsAuthenticated && User.IsInRole("User"))
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.DownloadUrl)
+            </dt>
+            <dd class="col-sm-10">
+                <a href="@Model.DownloadUrl" target="_blank" style="font-style: italic">link</a>
+            </dd>
+        }
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <h2>Reviews about @Model.Title</h2>
+    @if (Model.Reviews == null || !Model.Reviews.Any())
+    {
+        <p>No reviews available for this book.</p>
+    }
+    else
+    {
+        <ul>
+            @foreach (var review in Model.Reviews)
+            {
+                <li>
+                    <strong>@review.AppUser</strong>: @review.Comment
+                    <br />
+                    <small>Rating: @review.Rating / 10</small>
+                </li>
+            }
+        </ul>
+    }
+</div>
+
+<div>
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>
+    }
     <a asp-action="Index">Back to List</a>
 </div>

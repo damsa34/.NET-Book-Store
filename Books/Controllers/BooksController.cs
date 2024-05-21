@@ -9,6 +9,7 @@ using Books.Data;
 using Books.Models;
 using Books.ViewModels;
 using System.ComponentModel.Design;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Books.Controllers
 {
@@ -22,7 +23,6 @@ namespace Books.Controllers
         }
 
         // GET: Books
-
         public async Task<IActionResult> Index(string searchString)
         {
             IQueryable<Book> books = _context.Book.Include(b => b.Author).Include(b => b.Genres).ThenInclude(bg => bg.Genre).Include(b => b.Reviews);
@@ -58,6 +58,23 @@ namespace Books.Controllers
             return View(bookVM);
         }
 
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> Buy(int id)
+        {
+            var userId = User.Identity.Name; // Assuming the user name is unique
+            var userBook = new UserBooks
+            {
+                AppUser = userId,
+                BookId = id
+            };
+
+            _context.UserBooks.Add(userBook);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
         // GET: Books/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -83,6 +100,7 @@ namespace Books.Controllers
         }
 
         // GET: Books/Create
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create()
         {
             ViewBag.Genres = new MultiSelectList(await _context.Genre.ToListAsync(), "Id", "GenreName");
@@ -95,6 +113,7 @@ namespace Books.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("Id,Title,YearPublished,NumPages,Description,Publisher,FrontPage,DownloadUrl,AuthorId")] Book book, int[] selectedGenres)
         {
             if (ModelState.IsValid)
@@ -119,6 +138,7 @@ namespace Books.Controllers
         }
 
         // GET: Books/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -148,6 +168,7 @@ namespace Books.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,YearPublished,NumPages,Description,Publisher,FrontPage,DownloadUrl,AuthorId")] Book book, int[] selectedGenres)
         {
             if (id != book.Id)
@@ -194,6 +215,7 @@ namespace Books.Controllers
         }
 
         // GET: Books/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -215,6 +237,7 @@ namespace Books.Controllers
         // POST: Books/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var book = await _context.Book.FindAsync(id);

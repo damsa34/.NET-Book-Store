@@ -1,41 +1,105 @@
-﻿@model IEnumerable<Books.Models.UserBooks>
+﻿@model Books.ViewModels.BookFilterViewModel
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Collection of users</h1>
+<h1>Overview of our book collection</h1>
 
-<p>
-    <a asp-action="Create">Add new user</a>
-</p>
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Create">Add new book</a>
+    </p>
+}
+
+<form asp-controller="Books" asp-action="Index" method="get">
+    <div class="row">
+        <div class="col-md-8">
+            <input type="text" asp-for="SearchString" class="form-control" placeholder="Search by author, title, or genre..." />
+        </div>
+        <div class="col-md-4">
+            <input type="submit" value="Filter" class="btn btn-primary" />
+        </div>
+    </div>
+</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.AppUser)
+                @Html.DisplayNameFor(model => model.TemporaryBooks[0].FrontPage)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Book)
+                @Html.DisplayNameFor(model => model.TemporaryBooks[0].Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TemporaryBooks[0].Author.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TemporaryBooks[0].YearPublished)
+            </th>
+            <th>
+                Genres
+            </th>
+            <th>
+                Average rating
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-    @foreach (var item in Model) {
+        @if (Model.TemporaryBooks != null)
+        {
+            @foreach (var item in Model.TemporaryBooks)
+            {
                 <tr class="hoverable-row" onmouseover="this.classList.add('selected')" onmouseout="this.classList.remove('selected')">
-                <td>
-                    @Html.DisplayFor(modelItem => item.AppUser)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Book.Title)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-    }
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.FrontPage))
+                        {
+                            <img src="@item.FrontPage" alt="Book Cover" />
+                        }
+                        else
+                        {
+                            <p>No cover image available.</p>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Author.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.YearPublished)
+                    </td>
+                    <td>
+                        @if (item.Genres != null && item.Genres.Any())
+                        {
+                            <ul>
+                                @foreach (var genre in item.Genres)
+                                {
+                                    <li>@genre.Genre.GenreName</li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <span>No genres associated with @item.Title.</span>
+                        }
+                    </td>
+                    <td>
+                        @item.AverageRating()
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
+                    </td>
+                </tr>
+            }
+        }
     </tbody>
 </table>

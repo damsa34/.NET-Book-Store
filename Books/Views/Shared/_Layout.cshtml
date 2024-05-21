@@ -31,6 +31,11 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Reviews" asp-action="Index">Reviews</a>
                         </li>
                     </ul>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("User"))
+                    {
+                        <a class="link-primary" asp-area="" asp-controller="UserBooks" asp-action="MyBooks">My Books</a>
+                    }
+                    <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>

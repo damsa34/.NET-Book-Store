@@ -6,9 +6,13 @@
 
 <h1>Reviews</h1>
 
-<p>
-    <a asp-action="Create">Add new review</a>
-</p>
+@if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("User")))
+{
+    <p>
+        <a asp-action="Create">Add new review</a>
+    </p>
+}
+
 <table class="table">
     <thead>
         <tr>
@@ -43,9 +47,12 @@
                     @Html.DisplayFor(modelItem => item.Book.Title)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    }
                 </td>
             </tr>
     }

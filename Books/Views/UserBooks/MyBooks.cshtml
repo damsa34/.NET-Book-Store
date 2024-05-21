@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Books.Models.UserBooks>
+
+@{
+    ViewData["Title"] = "My Books";
+}
+
+<h1>Collection of your books</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Book.FrontPage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Book.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Book.Author.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Book.YearPublished)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="hoverable-row" onmouseover="this.classList.add('selected')" onmouseout="this.classList.remove('selected')">
+                <td>
+                    @if (!string.IsNullOrEmpty(item.Book.FrontPage))
+                    {
+                        <img src="@item.Book.FrontPage" alt="Book Cover" />
+                    }
+                    else
+                    {
+                        <p>No cover image available.</p>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Book.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Book.Author.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Book.YearPublished)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

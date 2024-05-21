@@ -4,10 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Books.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Books.Areas.Identity.Data;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
 namespace Books.Data
 {
-    public class BooksContext : DbContext
+    public class BooksContext : IdentityDbContext<BooksUser>
     {
         public BooksContext (DbContextOptions<BooksContext> options)
             : base(options)
@@ -49,6 +52,8 @@ namespace Books.Data
                 .HasForeignKey(b => b.BookId);
 
             builder.Entity<Author>().Ignore(a => a.FullName);
+
+            base.OnModelCreating(builder);
         }
     }
 }
