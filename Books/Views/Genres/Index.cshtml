@@ -23,13 +23,13 @@
         </tr>
     </thead>
     <tbody>
-    @foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
             <tr class="hoverable-row" onmouseover="this.classList.add('selected')" onmouseout="this.classList.remove('selected')">
                 <td>
-                    @Html.DisplayFor(modelItem => item.GenreName)
+                    <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.GenreName)</a>
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                     {
                         <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
@@ -37,6 +37,6 @@
                     }
                 </td>
             </tr>
-    }
+        }
     </tbody>
 </table>

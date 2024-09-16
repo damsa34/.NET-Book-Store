@@ -6,21 +6,19 @@
 
 <h1>Collection of your books</h1>
 
+<!-- Button to empty the entire collection -->
+<form asp-action="EmptyCollection" method="post">
+    <button type="submit" class="btn btn-danger">Empty Collection</button>
+</form>
+
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Book.FrontPage)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Book.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Book.Author.FullName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Book.YearPublished)
-            </th>
+            <th>@Html.DisplayNameFor(model => model.First().Book.FrontPage)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Book.Title)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Book.Author.FullName)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Book.YearPublished)</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -37,14 +35,14 @@
                         <p>No cover image available.</p>
                     }
                 </td>
+                <td>@Html.DisplayFor(modelItem => item.Book.Title)</td>
+                <td>@Html.DisplayFor(modelItem => item.Book.Author.FullName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Book.YearPublished)</td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Book.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Book.Author.FullName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Book.YearPublished)
+                    <form asp-action="DeleteBook" method="post">
+                        <input type="hidden" name="bookId" value="@item.BookId" />
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
                 </td>
             </tr>
         }

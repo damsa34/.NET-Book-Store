@@ -56,7 +56,37 @@ namespace Books.Controllers
                 .Where(ub => ub.AppUser == userId)
                 .ToListAsync();
 
-            return View(myBooks);
+            var distinctBooks = myBooks
+                .GroupBy(ub => ub.BookId)
+                .Select(g => g.First())
+                .ToList();
+
+            return View(distinctBooks);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EmptyCollection()
+        {
+            var userId = User.Identity.Name;
+            var userBooks = _context.UserBooks
+                .Where(ub => ub.AppUser == userId);
+
+            _context.UserBooks.RemoveRange(userBooks);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(MyBooks));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteBook(int bookId)
+        {
+            var userId = User.Identity.Name;
+            var userBooks = _context.UserBooks.Where(ub => ub.AppUser == userId && ub.BookId == bookId);
+
+            _context.UserBooks.RemoveRange(userBooks); 
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(MyBooks));
         }
 
         // GET: UserBooks/Create

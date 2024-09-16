@@ -9,63 +9,48 @@
 @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
 {
     <p>
-        <a asp-action="Create">Add new author</a>
+        <a asp-action="Create" class="btn btn-success">Add new author</a>
     </p>
 }
+
 <form asp-controller="Authors" asp-action="Index" method="get">
     <div class="form-group">
         <input type="text" name="searchString" class="form-control" placeholder="Search by first or last name..." />
         <input type="submit" value="Filter" class="btn btn-primary" />
     </div>
 </form>
+
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BirthDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Nationality)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Gender)
-            </th>
-            <th></th>
+            <th>@Html.DisplayNameFor(model => model.FirstName)</th>
+            <th>@Html.DisplayNameFor(model => model.LastName)</th>
+            <th>@Html.DisplayNameFor(model => model.BirthDate)</th>
+            <th>@Html.DisplayNameFor(model => model.Nationality)</th>
+            <th>@Html.DisplayNameFor(model => model.Gender)</th>
         </tr>
     </thead>
     <tbody>
-    @foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
             <tr class="hoverable-row" onmouseover="this.classList.add('selected')" onmouseout="this.classList.remove('selected')">
                 <td>
-                    @Html.DisplayFor(modelItem => item.FirstName)
+                    <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.FirstName)</a>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.LastName)
+                    <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.LastName)</a>
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.BirthDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Nationality)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Gender)
-                </td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-                    {
+                <td>@Html.DisplayFor(modelItem => item.BirthDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.Nationality)</td>
+                <td>@Html.DisplayFor(modelItem => item.Gender)</td>
+                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                    <td>
                         <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                         <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    }
-                </td>
+                    </td>
+                }
             </tr>
-    }
+        }
     </tbody>
 </table>

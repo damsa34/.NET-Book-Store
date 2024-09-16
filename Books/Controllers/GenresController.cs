@@ -35,6 +35,9 @@ namespace Books.Controllers
             }
 
             var genre = await _context.Genre
+                .Include(g => g.Books)
+                    .ThenInclude(bg => bg.Book)
+                    .ThenInclude(b => b.Author)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (genre == null)
             {
